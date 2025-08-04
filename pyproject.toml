@@ -1,0 +1,23 @@
+[tool.ruff]
+target-version = "py311"
+line-length = 240
+
+# 要启用的规则类型
+select = ["E", "F", "I", "UP", "C90"]
+
+# 忽略的规则
+ignore = ["E501", "C901"]
+
+# 排除目录和文件
+exclude = ["venv", ".git", "__pycache__", "migrations", "build", "dist"]
+extend-exclude = ["*.pyc", "*.egg-info"]
+
+# 默认启用自动修复
+fix = true
+show-fixes = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+docstring-code-format = true
