@@ -2,18 +2,18 @@
 
 自用签到工具，支持常去的论坛获取积分和明日方舟森空岛
 
-## Website
+## Function
 
-- Chiphell（签到）
-- 4K 世界（签到）
-- 天雪（模拟下载字幕）
-- 花火学园（签到）
-- 天使动漫（打工、签到）
-- 心动日剧（签到）
-- PSNINE（签到）
-- 静安大悦城（签到）
-- 明日方舟（游戏签到，支持多账号）
+`search-anime`
 
-## Usage
+动画搜索脚本，根据 Notion 中的“名称”字段，在线搜索 Bangumi 结果，并更新 Bangumi ID 与日文标题至数据库中
 
-将 `config.example.json` 修改为 `config.json`，并填写 cookies 或 token。未填写的签到项目会自动跳过
+通常在每季度添加新番后，手动运行一次即可
+
+`sync-anime`
+
+动画同步脚本，将 Bangumi 的评分和收藏状态同步至 Notion 数据库中
+
+`sync-game`
+
+游戏同步脚本，功能待定
