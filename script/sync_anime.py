@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from src.notion import query_database, update_page
 
 
-def update_thread(anime):
+def update_anime(anime):
     # 提取bangumi_id和title
     bangumi_id = anime["properties"]["URL"]["url"].split("/")[-1]
     anime_title = anime["properties"]["名称"]["title"][0]["plain_text"]
@@ -59,12 +59,12 @@ if __name__ == "__main__":
     print("——————————")
     with ThreadPoolExecutor(max_workers=20) as executor:
         index = 0
-        futures = [executor.submit(update_thread, anime) for anime in anime_list]
+        futures = [executor.submit(update_anime, anime) for anime in anime_list]
         for future in as_completed(futures):
             try:
                 result = future.result()
                 index += 1
-                print(f"成功[{index}/{len(anime_list)}]: {result[0]} - {result[1]}")
+                print(f"完成[{index}/{len(anime_list)}]: {result[0]} - {result[1]}")
             except Exception as e:
                 index += 1
                 print(f"失败[{index}/{len(anime_list)}]: {e}")
