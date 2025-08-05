@@ -20,7 +20,12 @@ def update_game(game, wishlist):
 
     # 添加游戏状态
     if game["properties"]["游戏状态"]["status"]["name"] not in ["在库中", "游玩中", "通关"]:
-        game_data["游戏状态"] = {"status": {"name": "愿望单" if any(item["id"] == game_id for item in wishlist) else "愿望外"}}
+        if not response[str(game_id)]["data"].get("price_overview"):
+            game_data["游戏状态"] = {"status": {"name": "未发售"}}
+        elif any(item["id"] == game_id for item in wishlist):
+            game_data["游戏状态"] = {"status": {"name": "愿望单"}}
+        else:
+            game_data["游戏状态"] = {"status": {"name": "愿望外"}}
 
     # 添加原价
     if response[str(game_id)]["data"].get("price_overview"):
