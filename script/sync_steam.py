@@ -5,22 +5,39 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from dotenv import load_dotenv
 
-from src.notion import query_database, update_page, create_page
+from src.notion import create_page, query_database, update_page
 
 
 def update_game(game, wishlist):
-    return 0, 1
-    # print(game)
-    # print(wishlist)
-    # 提取steam_id
-    # steam_id = game["properties"]["ID"]["number"]
+    # 获取游戏信息
+    game_id = game["properties"]["ID"]["number"]
+    response = requests.get(f"https://store.steampowered.com/api/appdetails?appids={game_id}&l=schinese&cc=cn").json()
 
-    # 检测steam_id是不是在愿望单中
-    # 在game中添加in_wishlist属性
+    # 添加游戏名称
+    game_data = {}
+    if not game["properties"]["名称"]["title"]:
+        game_data["名称"] = {"title": [{"text": {"content": response[str(game_id)]["data"]["name"]}}]}
 
-    # 愿望单  发售日期  史低
+    # 添加游戏状态
+    if game["properties"]["游戏状态"]["status"]["name"] not in ["在库中", "游玩中", "通关"]:
+        game_data["游戏状态"] = {"status": {"name": "愿望单" if any(item["id"] == game_id for item in wishlist) else "愿望外"}}
 
-    # 愿望单的创建回来
+    # 添加原价
+    if response[str(game_id)]["data"].get("price_overview"):
+        game_data["原价"] = {"number": response[str(game_id)]["data"]["price_overview"]["initial"] / 100}
+
+    # 添加发售日期（必须包含年月日）
+    if response[str(game_id)]["data"].get("release_date"):
+        parts = response[str(game_id)]["data"]["release_date"]["date"].replace("年", "-").replace("月", "-").replace("日", "").split("-")
+        if len(parts) == 3:
+            year, month, day = parts
+            format_date = f"{year.strip()}-{month.strip().zfill(2)}-{day.strip().zfill(2)}"
+            game_data["发售日期"] = {"date": {"start": format_date}}
+
+    # 更新游戏信息到数据库
+    update_page(os.getenv("NOTION_DB_GAME"), game["id"], game_data)
+
+    return game_id, response[str(game_id)]["data"]["name"]
 
 
 if __name__ == "__main__":
@@ -53,9 +70,10 @@ if __name__ == "__main__":
         print("愿望单中没有新游戏")
     else:
         print(f"从愿望单添加了{wishlist_count}个游戏")
+        database = query_database(os.getenv("NOTION_DB_GAME"))
+        game_list = [item for item in database if item["properties"]["ID"]["number"]]  # 排除没有id的游戏
 
-
-    # 从Bangumi获取最新内容，并更新到Notion
+    # 从Steam获取最新内容，并更新到Notion
     print("——————————")
     with ThreadPoolExecutor(max_workers=20) as executor:
         index = 0
