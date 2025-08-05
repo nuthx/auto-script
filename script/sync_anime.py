@@ -53,7 +53,7 @@ if __name__ == "__main__":
     print("获取动画列表")
     database = query_database(os.getenv("NOTION_DB_BANGUMI"))
     anime_list = [item for item in database if item["properties"]["URL"]["url"]]  # 排除没有url的动画
-    print(f"当前共有{len(anime_list)}部动画，已排除{len(database) - len(anime_list)}条记录")
+    print(f"当前共有{len(anime_list)}部动画，已忽略{len(database) - len(anime_list)}条没有URL的记录")
 
     # 从Bangumi获取最新内容，并更新到Notion
     print("——————————")

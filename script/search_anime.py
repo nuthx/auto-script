@@ -20,7 +20,7 @@ def update_anime(anime):
         anime["bangumi"]["title"] = response["list"][0]["name"]
     else:
         return
-    
+
     # 更新标题和链接到数据库
     update_page(
         anime["id"],

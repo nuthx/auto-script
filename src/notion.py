@@ -47,3 +47,17 @@ def update_page(page_id, content):
 
     response = requests.patch(url, json=data, headers=headers)
     return response
+
+
+# 创建数据库条目
+def create_page(database_id, content):
+    url = "https://api.notion.com/v1/pages"
+    headers = {
+        "Authorization": "Bearer " + os.getenv("NOTION_TOKEN"),
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json",
+    }
+    data = {"parent": {"database_id": database_id}, "properties": content}
+
+    response = requests.post(url, json=data, headers=headers)
+    return response
