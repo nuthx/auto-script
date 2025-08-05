@@ -29,6 +29,7 @@ def update_anime(anime):
     # 更新评分和收藏状态到数据库
     if anime["bangumi"]["collection"]:
         update_page(
+            os.getenv("NOTION_DB_BANGUMI"),
             anime["id"],
             {
                 "评分": {"number": anime["bangumi"]["score"]},
@@ -36,7 +37,7 @@ def update_anime(anime):
             },
         )
     else:
-        update_page(anime["id"], {"评分": {"number": anime["bangumi"]["score"]}})
+        update_page(os.getenv("NOTION_DB_BANGUMI"), anime["id"], {"评分": {"number": anime["bangumi"]["score"]}})
 
     return bangumi_id, anime_title
 

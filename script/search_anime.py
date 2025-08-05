@@ -23,6 +23,7 @@ def update_anime(anime):
 
     # 更新标题和链接到数据库
     update_page(
+        os.getenv("NOTION_DB_BANGUMI"),
         anime["id"],
         {
             "原名": {"rich_text": [{"text": {"content": anime["bangumi"]["title"]}}]},

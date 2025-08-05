@@ -33,7 +33,7 @@ def query_database(database_id):
 
 
 # 更新数据库条目
-def update_page(page_id, content):
+def update_page(database_id, page_id, content):
     url = f"https://api.notion.com/v1/pages/{page_id}"
     headers = {
         "Authorization": "Bearer " + os.getenv("NOTION_TOKEN"),
@@ -41,7 +41,7 @@ def update_page(page_id, content):
         "Content-Type": "application/json",
     }
     data = {
-        "parent": {"database_id": os.getenv("NOTION_DB_BANGUMI")},
+        "parent": {"database_id": database_id},
         "properties": content,
     }
 
