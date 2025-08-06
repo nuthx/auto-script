@@ -1,10 +1,12 @@
 import os
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 from dotenv import load_dotenv
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.notion import create_page, query_database, update_page
 
 
