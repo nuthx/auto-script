@@ -39,8 +39,11 @@ def update_game(game, wishlist):
             format_date = f"{year.strip()}-{month.strip().zfill(2)}-{day.strip().zfill(2)}"
             game_data["发售日期"] = {"date": {"start": format_date}}
 
+    # 添加封面
+    cover_url = response[str(game_id)]["data"].get("header_image")
+    
     # 更新游戏信息到数据库
-    update_page(os.getenv("NOTION_DB_GAME"), game["id"], game_data)
+    update_page(os.getenv("NOTION_DB_GAME"), game["id"], game_data, cover_url)
 
     return game_id, response[str(game_id)]["data"]["name"]
 
