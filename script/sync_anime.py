@@ -23,7 +23,7 @@ def update_anime(anime):
 
     # 获取用户的收藏状态
     collection_mapping = {1: "想看", 2: "看过", 3: "在看", 4: "搁置", 5: "抛弃"}
-    response = requests.get(f"https://api.bgm.tv/v0/users/{os.getenv('BANGUMI_USER_ID')}/collections/{bangumi_id}", headers=headers).json()
+    response = requests.get(f"https://api.bgm.tv/v0/users/{os.getenv('BANGUMI_UID')}/collections/{bangumi_id}", headers=headers).json()
     anime["bangumi"]["collection"] = collection_mapping.get(response.get("type", 0), None)  # 如果没有收藏，则collection_mapping为0，然后自动设置为None
 
     # 更新评分和收藏状态到数据库
