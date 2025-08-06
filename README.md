@@ -1,8 +1,10 @@
 # auto-script
 
-自用定时同步脚本，挂载青龙后定时向Notion中同步数据
+自用定时同步脚本，定时向 Notion 中同步数据
 
-## Function
+支持本地或青龙运行
+
+## 功能
 
 `search-anime`
 
