@@ -1,6 +1,6 @@
-# auto-sign
+# auto-script
 
-自用签到工具，支持常去的论坛获取积分和明日方舟森空岛
+自用定时同步脚本，挂载青龙后定时向Notion中同步数据
 
 ## Function
 
