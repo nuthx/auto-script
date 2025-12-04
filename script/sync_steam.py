@@ -24,7 +24,7 @@ def update_game(game, wishlist):
     if game["properties"]["游戏状态"]["status"]["name"] not in ["在库中", "游玩中", "通关"]:
         if not response[str(game_id)]["data"].get("price_overview"):
             game_data["游戏状态"] = {"status": {"name": "未发售"}}
-        elif any(item["id"] == game_id for item in wishlist):
+        elif any(item["appid"] == game_id for item in wishlist["response"]["items"]):
             game_data["游戏状态"] = {"status": {"name": "愿望单"}}
         else:
             game_data["游戏状态"] = {"status": {"name": "愿望外"}}
@@ -65,14 +65,14 @@ if __name__ == "__main__":
     print(f"当前共有{len(game_list)}个游戏，已忽略{len(database) - len(game_list)}条没有ID的记录")
 
     # 获取愿望单（第三方API）
-    wishlist = requests.get(f"https://www.steamwishlistcalculator.com/api/wishlist?steamId={os.getenv('STEAM_UID')}&countryCode=CN").json()
+    wishlist = requests.get(f"https://api.steampowered.com/IWishlistService/GetWishlist/v1/?steamid={os.getenv('STEAM_UID')}").json()
 
     # 检查游戏是否只在愿望单中，如果是则创建相应的Notion条目
     wishlist_count = 0
-    for item in wishlist:
-        if not any(game["properties"]["ID"]["number"] == item["id"] for game in game_list):
+    for item in wishlist["response"]["items"]:
+        if not any(game["properties"]["ID"]["number"] == item["appid"] for game in game_list):
             wishlist_count += 1
-            create_page(os.getenv("NOTION_DB_GAME"), {"ID": {"number": item["id"]}})
+            create_page(os.getenv("NOTION_DB_GAME"), {"ID": {"number": item["appid"]}})
 
     # 打印愿望单的添加结果
     print("——————————")
