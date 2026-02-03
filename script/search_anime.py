@@ -15,11 +15,17 @@ def update_anime(anime):
     headers = {"accept": "application/json", "User-Agent": "nuthx/notion-assistant"}
 
     # 搜索bangumi_id
-    response = requests.get(f"https://api.bgm.tv/search/subject/{anime['properties']['名称']['title'][0]['plain_text']}?type=2&responseGroup=small", headers=headers).json()
-    if response["list"]:
+    search_data = {
+        "keyword": anime["properties"]["名称"]["title"][0]["plain_text"],
+        "sort": "rank",
+        "filter": {"type": [2]},
+    }
+    response = requests.post("https://api.bgm.tv/v0/search/subjects", headers=headers, json=search_data).json()
+
+    if response["data"]:
         anime["bangumi"] = {}
-        anime["bangumi"]["id"] = response["list"][0]["id"]
-        anime["bangumi"]["title"] = response["list"][0]["name"]
+        anime["bangumi"]["id"] = response["data"][0]["id"]
+        anime["bangumi"]["title"] = response["data"][0]["name"]
     else:
         return
 
