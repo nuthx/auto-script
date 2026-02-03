@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from dotenv import load_dotenv
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.notion import create_page, query_database, update_page
 
 
@@ -43,7 +43,7 @@ def update_game(game, wishlist):
 
     # 添加封面
     cover_url = response[str(game_id)]["data"].get("header_image")
-    
+
     # 更新游戏信息到数据库
     update_page(os.getenv("NOTION_DB_GAME"), game["id"], game_data, cover_url)
 
